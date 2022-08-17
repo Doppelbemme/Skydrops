@@ -14,6 +14,15 @@ public class FileManager {
     File locationFile = new File("plugins/SkyDrop", "locations.yml");
     public FileConfiguration locationCfg = YamlConfiguration.loadConfiguration(locationFile);
 
+    File tierOneFile = new File("plugins/SkyDrop/loot", "tier1.yml");
+    public FileConfiguration tierOneCfg = YamlConfiguration.loadConfiguration(tierOneFile);
+
+    File tierTwoFile = new File("plugins/SkyDrop/loot", "tier2.yml");
+    public FileConfiguration tierTwoCfg = YamlConfiguration.loadConfiguration(tierTwoFile);
+
+    File tierThreeFile = new File("plugins/SkyDrop/loot", "tier3.yml");
+    public FileConfiguration tierThreeCfg = YamlConfiguration.loadConfiguration(tierThreeFile);
+
     public void saveLocationFile() {
         try {
             locationCfg.save(locationFile);
@@ -77,4 +86,85 @@ public class FileManager {
         generatorCfg.addDefault("skydrop.tier3.hideUnbreakable", false);
         saveGeneratorFile();
     }
+
+    public void saveTierOneFile() {
+        try {
+            tierOneCfg.save(tierOneFile);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void saveTierTwoFile() {
+        try {
+            tierTwoCfg.save(tierTwoFile);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void saveTierThreeFile() {
+        try {
+            tierThreeCfg.save(tierThreeFile);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void setupTierOneFile() {
+        if (tierOneCfg.contains("item.")) {
+            return;
+        }
+        tierOneCfg.options().copyDefaults(true);
+        tierOneCfg.addDefault("item.example.material", "DIRT");
+        tierOneCfg.addDefault("item.example.subid", 0);
+        tierOneCfg.addDefault("item.example.amount", 1);
+        tierOneCfg.addDefault("item.example.displayName", "Example");
+        tierOneCfg.addDefault("item.example.lore", Arrays.asList("Lore1", "Lore2"));
+        tierOneCfg.addDefault("item.example.enchantments", Arrays.asList("ARROW_DAMAGE:1", "ARROW_INFINITE:1"));
+        tierOneCfg.addDefault("item.example.hideEnchantments", false);
+        tierOneCfg.addDefault("item.example.unbreakable", false);
+        tierOneCfg.addDefault("item.example.hideUnbreakable", false);
+        tierOneCfg.addDefault("item.example.dropchance", 100);
+
+        saveTierOneFile();
+    }
+
+    public void setupTierTwoFile() {
+        if (tierTwoCfg.contains("item.")) {
+            return;
+        }
+        tierOneCfg.options().copyDefaults(true);
+        tierOneCfg.addDefault("item.example.material", "DIRT");
+        tierOneCfg.addDefault("item.example.subid", 0);
+        tierOneCfg.addDefault("item.example.amount", 1);
+        tierOneCfg.addDefault("item.example.displayName", "Example");
+        tierOneCfg.addDefault("item.example.lore", Arrays.asList("Lore1", "Lore2"));
+        tierOneCfg.addDefault("item.example.enchantments", Arrays.asList("ARROW_DAMAGE:1", "ARROW_INFINITE:1"));
+        tierOneCfg.addDefault("item.example.hideEnchantments", false);
+        tierOneCfg.addDefault("item.example.unbreakable", false);
+        tierOneCfg.addDefault("item.example.hideUnbreakable", false);
+        tierOneCfg.addDefault("item.example.dropchance", 100);
+        saveTierTwoFile();
+    }
+
+    public void setupTierThreeFile() {
+        if (tierThreeCfg.contains("item.")) {
+            return;
+        }
+        tierThreeCfg.options().copyDefaults(true);
+        tierThreeCfg.addDefault("item.example.material", "DIRT");
+        tierThreeCfg.addDefault("item.example.subid", 0);
+        tierThreeCfg.addDefault("item.example.amount", 1);
+        tierThreeCfg.addDefault("item.example.displayName", "Example");
+        tierThreeCfg.addDefault("item.example.lore", Arrays.asList("Lore1", "Lore2"));
+        tierThreeCfg.addDefault("item.example.enchantments", Arrays.asList("ARROW_DAMAGE:1", "ARROW_INFINITE:1"));
+        tierThreeCfg.addDefault("item.example.hideEnchantments", false);
+        tierThreeCfg.addDefault("item.example.unbreakable", false);
+        tierThreeCfg.addDefault("item.example.hideUnbreakable", false);
+        tierThreeCfg.addDefault("item.example.dropchance", 100);
+
+        saveTierThreeFile();
+    }
+
 }

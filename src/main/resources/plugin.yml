@@ -5,5 +5,7 @@ authors: [ Doppelbemme ]
 description: A skybounds like skydrop system
 website: https://de.fiverr.com/doppelbemme
 commands:
-  test:
   setupitem:
+  givegenerator:
+  additem:
+  summonskydrop:

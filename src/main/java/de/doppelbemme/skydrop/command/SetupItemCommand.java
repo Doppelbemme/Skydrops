@@ -28,6 +28,7 @@ public class SetupItemCommand implements CommandExecutor {
             return false;
         }
 
+        MessageUtil.sendPositiveFeedback(player, "§aYou have received the setup tool.");
         player.getInventory().addItem(ItemUtil.getSetupItem());
         return false;
     }

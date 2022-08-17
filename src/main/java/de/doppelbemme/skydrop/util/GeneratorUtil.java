@@ -21,7 +21,6 @@ public class GeneratorUtil {
         if (tier > 3) {
             return null;
         }
-        Bukkit.broadcastMessage("skydrop.tier" + tier + "." + category.toLowerCase());
         return "skydrop.tier" + tier + "." + category;
     }
 
