@@ -4,3 +4,8 @@ main: de.doppelbemme.skydrop.Skydrop
 authors: [ Doppelbemme ]
 description: A skybounds like skydrop system
 website: https://de.fiverr.com/doppelbemme
+commands:
+  setupitem:
+  givegenerator:
+  additem:
+  summonskydrop:
