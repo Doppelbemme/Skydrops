@@ -1,9 +1,6 @@
 package de.doppelbemme.skydrop;
 
-import de.doppelbemme.skydrop.command.AddItemCommand;
-import de.doppelbemme.skydrop.command.GiveGeneratorCommand;
-import de.doppelbemme.skydrop.command.SetupItemCommand;
-import de.doppelbemme.skydrop.command.SummonSkydrop;
+import de.doppelbemme.skydrop.command.*;
 import de.doppelbemme.skydrop.file.FileManager;
 import de.doppelbemme.skydrop.listener.InventoryCloseListener;
 import de.doppelbemme.skydrop.listener.InventoryInteractListener;
@@ -21,6 +18,7 @@ public final class Skydrop extends JavaPlugin {
 
     public static Skydrop instance;
     public FileManager fileManager;
+    public static boolean enabled = true;
 
     @Override
     public void onEnable() {
@@ -51,6 +49,7 @@ public final class Skydrop extends JavaPlugin {
         getCommand("setupitem").setExecutor(new SetupItemCommand());
         getCommand("additem").setExecutor(new AddItemCommand());
         getCommand("summonskydrop").setExecutor(new SummonSkydrop());
+        getCommand("skydropadmin").setExecutor(new SkydropAdminCommand());
     }
 
     private void registerListener() {

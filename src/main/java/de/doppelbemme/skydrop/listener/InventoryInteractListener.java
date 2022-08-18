@@ -3,8 +3,10 @@ package de.doppelbemme.skydrop.listener;
 import de.doppelbemme.skydrop.Skydrop;
 import de.doppelbemme.skydrop.inventorys.SkydropBonusInventory;
 import de.doppelbemme.skydrop.item.ItemBuilder;
+import de.doppelbemme.skydrop.util.GeneratorUtil;
 import de.doppelbemme.skydrop.util.LootchestUtil;
 import de.doppelbemme.skydrop.util.MessageUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,9 +14,11 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
@@ -29,6 +33,10 @@ public class InventoryInteractListener implements Listener {
             return;
         }
         if (event.getInventory().getName().contains("§e§lSkyDop Bonus")) {
+            if (event.getClick() != ClickType.LEFT) {
+                event.setCancelled(true);
+                return;
+            }
             int tier;
             ItemStack clickedItem = event.getCurrentItem();
             if (event.getInventory().getName().contains("1")) {
@@ -60,6 +68,8 @@ public class InventoryInteractListener implements Listener {
             int clicks = SkydropBonusInventory.clickCounter.get(player);
 
             if (clicks >= 5) {
+                Bukkit.getScheduler().cancelTask(SkydropBonusInventory.animation.get(event.getInventory()));
+                SkydropBonusInventory.animation.remove(event.getInventory());
                 for (int slot = 0; slot < 54; slot++) {
                     if (event.getInventory().getItem(slot) == null || event.getInventory().getItem(slot).getType() == Material.AIR || event.getInventory().getItem(slot).getType() == Material.STAINED_GLASS_PANE) {
                         event.getInventory().setItem(slot, new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 5).
@@ -92,6 +102,71 @@ public class InventoryInteractListener implements Listener {
                 }.runTaskTimer(Skydrop.instance, 0, 20);
             }
             event.setCancelled(true);
+        }
+        if (event.getInventory().getName().equalsIgnoreCase("§e§lSkyDrop Admin")) {
+            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
+                event.setCancelled(true);
+                return;
+            }
+            ItemStack itemStack = event.getCurrentItem();
+            ItemMeta itemMeta = itemStack.getItemMeta();
+
+            if (itemMeta.getDisplayName().equalsIgnoreCase("§b§lSkyDrop Tier 1")) {
+                if (event.getClick() == ClickType.LEFT) {
+                    player.getInventory().addItem(GeneratorUtil.getGenerator(1));
+                    MessageUtil.sendPositiveFeedback(player, "§aItem has been added to your inventory.");
+                } else if (event.getClick() == ClickType.RIGHT) {
+                    LootchestUtil.summonSkydrop(1);
+                } else {
+                    event.setCancelled(true);
+                }
+                player.closeInventory();
+                event.setCancelled(true);
+                return;
+            }
+
+            if (itemMeta.getDisplayName().equalsIgnoreCase("§b§lSkyDrop Tier 2")) {
+                if (event.getClick() == ClickType.LEFT) {
+                    player.getInventory().addItem(GeneratorUtil.getGenerator(2));
+                    MessageUtil.sendPositiveFeedback(player, "§aItem has been added to your inventory.");
+                } else if (event.getClick() == ClickType.RIGHT) {
+                    LootchestUtil.summonSkydrop(2);
+                } else {
+                    event.setCancelled(true);
+                }
+                player.closeInventory();
+                event.setCancelled(true);
+                return;
+            }
+
+            if (itemMeta.getDisplayName().equalsIgnoreCase("§b§lSkyDrop Tier 3")) {
+                if (event.getClick() == ClickType.LEFT) {
+                    player.getInventory().addItem(GeneratorUtil.getGenerator(3));
+                    MessageUtil.sendPositiveFeedback(player, "§aItem has been added to your inventory.");
+                } else if (event.getClick() == ClickType.RIGHT) {
+                    LootchestUtil.summonSkydrop(3);
+                } else {
+                    event.setCancelled(true);
+                }
+                player.closeInventory();
+                event.setCancelled(true);
+                return;
+            }
+
+            if (itemMeta.getDisplayName().equalsIgnoreCase("§a§lSkyDrop Aktiviert")) {
+                Skydrop.enabled = false;
+                MessageUtil.sendPositiveFeedback(player, "§aSkyDrops have been disabled sucessfully.");
+                player.closeInventory();
+                event.setCancelled(true);
+                return;
+            }
+
+            if (itemMeta.getDisplayName().equalsIgnoreCase("§c§lSkyDrop Deaktiviert")) {
+                Skydrop.enabled = true;
+                MessageUtil.sendPositiveFeedback(player, "§aSkyDrops have been enabled sucessfully.");
+                player.closeInventory();
+                event.setCancelled(true);
+            }
         }
     }
 
