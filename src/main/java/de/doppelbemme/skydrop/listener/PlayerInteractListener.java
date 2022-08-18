@@ -1,6 +1,8 @@
 package de.doppelbemme.skydrop.listener;
 
+import de.doppelbemme.skydrop.util.GeneratorUtil;
 import de.doppelbemme.skydrop.util.LocationUtil;
+import de.doppelbemme.skydrop.util.LootchestUtil;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Chest;
@@ -40,6 +42,23 @@ public class PlayerInteractListener implements Listener {
                     event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.NOTE_BASS, 5, 1);
                     event.setCancelled(true);
                 }
+            }
+        }
+
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
+            if (event.getPlayer().getInventory().getItemInHand().isSimilar(GeneratorUtil.getGenerator(1))) {
+                LootchestUtil.summonSkydrop(event.getPlayer(), 1);
+                LootchestUtil.consumeItemstack(event.getPlayer().getInventory().getItemInHand(), event.getPlayer());
+                return;
+            }
+            if (event.getPlayer().getInventory().getItemInHand().isSimilar(GeneratorUtil.getGenerator(2))) {
+                LootchestUtil.summonSkydrop(event.getPlayer(), 2);
+                LootchestUtil.consumeItemstack(event.getPlayer().getInventory().getItemInHand(), event.getPlayer());
+                return;
+            }
+            if (event.getPlayer().getInventory().getItemInHand().isSimilar(GeneratorUtil.getGenerator(3))) {
+                LootchestUtil.summonSkydrop(event.getPlayer(), 3);
+                LootchestUtil.consumeItemstack(event.getPlayer().getInventory().getItemInHand(), event.getPlayer());
             }
         }
     }

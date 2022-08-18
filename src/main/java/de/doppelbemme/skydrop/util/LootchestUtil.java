@@ -1,10 +1,9 @@
 package de.doppelbemme.skydrop.util;
 
 import de.doppelbemme.skydrop.Skydrop;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import de.doppelbemme.skydrop.inventorys.SkydropBonusInventory;
+import de.doppelbemme.skydrop.item.ItemBuilder;
+import org.bukkit.*;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -12,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import xyz.tozymc.spigot.api.title.TitleApi;
 
 import java.util.ArrayList;
@@ -107,24 +107,60 @@ public class LootchestUtil {
 
         for (Player currentPlayer : Bukkit.getOnlinePlayers()) {
             currentPlayer.playSound(currentPlayer.getLocation(), Sound.AMBIENCE_THUNDER, 5, 1);
-            TitleApi.sendTitle(player, "§6§lSky Drops!", "§f§l" + player.getName() + " §7§lrestocked all skychests!", 20, 80, 20);
+            if (tier == 1) {
+                TitleApi.sendTitle(currentPlayer, "§6§lSky Drops!", "§f§l" + player.getName() + " §7§lrestocked all skychests!", 20, 80, 20);
+            } else if (tier == 2) {
+                TitleApi.sendTitle(currentPlayer, "§b§lSUPER Sky Drops!", "§f§l" + player.getName() + " §7§lrestocked all skychests §c§lwith extra loot§7§l!", 20, 80, 20);
+            } else {
+                TitleApi.sendTitle(currentPlayer, "§5§lIMMORTAL Sky Drops!", "§f§l" + player.getName() + " §7§lrestocked all skychests §5§lwith special loot§7§l!", 20, 80, 20);
+            }
         }
+        sendParticle(player);
+        new BukkitRunnable() {
+            int i = 5;
+
+            @Override
+            public void run() {
+                if (i > 0) {
+                    MessageUtil.sendPositiveFeedback(player, "§ePersonal Item Lottery In: §f" + i + "s");
+                    i = i - 1;
+                    return;
+                } else {
+                    SkydropBonusInventory.clickCounter.put(player, 0);
+                    SkydropBonusInventory.lotteryLoot.put(player, new ArrayList());
+                    player.openInventory(SkydropBonusInventory.getInventory(tier));
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(Skydrop.instance, 0, 20);
 
         for (String path : Skydrop.instance.fileManager.locationCfg.getConfigurationSection("skychest.").getKeys(false)) {
             if (LocationUtil.isLocationActive(LocationUtil.getLocationFromConfig(Integer.parseInt(path)))) {
+                Location location = LocationUtil.getLocationFromConfig(Integer.parseInt(path));
+                location.getWorld().strikeLightningEffect(location);
                 Chest chest = (Chest) LocationUtil.getLocationFromConfig(Integer.parseInt(path)).getBlock().getState();
                 chest.getInventory().clear();
-                for (String itemPath : Skydrop.instance.fileManager.tierOneCfg.getConfigurationSection("item.").getKeys(false)) {
+                FileConfiguration fileConfiguration;
+
+                if (tier == 1) {
+                    fileConfiguration = Skydrop.instance.fileManager.tierOneCfg;
+                } else if (tier == 2) {
+                    fileConfiguration = Skydrop.instance.fileManager.tierTwoCfg;
+                } else {
+                    fileConfiguration = Skydrop.instance.fileManager.tierThreeCfg;
+                }
+
+                for (String itemPath : fileConfiguration.getConfigurationSection("item.").getKeys(false)) {
                     int randomNumber = ThreadLocalRandom.current().nextInt(1, 100 + 1);
-                    if (randomNumber <= Skydrop.instance.fileManager.tierOneCfg.getInt("item." + itemPath + ".dropchance")) {
+                    if (randomNumber <= fileConfiguration.getInt("item." + itemPath + ".dropchance")) {
                         int randomSlot = ThreadLocalRandom.current().nextInt(0, 26 + 1);
                         if (chest.getInventory().firstEmpty() == -1) {
                             continue;
                         }
                         if (chest.getInventory().getItem(randomSlot) == null || chest.getInventory().getItem(randomSlot).getType() == Material.AIR) {
-                            chest.getInventory().setItem(randomSlot, getItemstackFromConfig(Skydrop.instance.fileManager.tierOneCfg, "item." + itemPath));
+                            chest.getInventory().setItem(randomSlot, getItemstackFromConfig(fileConfiguration, "item." + itemPath));
                         } else {
-                            chest.getInventory().setItem(chest.getInventory().firstEmpty(), getItemstackFromConfig(Skydrop.instance.fileManager.tierOneCfg, "item." + itemPath));
+                            chest.getInventory().setItem(chest.getInventory().firstEmpty(), getItemstackFromConfig(fileConfiguration, "item." + itemPath));
                         }
                     }
                 }
@@ -133,6 +169,54 @@ public class LootchestUtil {
     }
 
     public static void summonSkydrop(int tier) {
+        if (!Skydrop.instance.fileManager.locationCfg.contains("skychest.")) {
+            Bukkit.getLogger().warning("§cAn error occured. Skydrop could not be summoned.");
+            return;
+        }
+
+        for (Player currentPlayer : Bukkit.getOnlinePlayers()) {
+            currentPlayer.playSound(currentPlayer.getLocation(), Sound.AMBIENCE_THUNDER, 5, 1);
+            if (tier == 1) {
+                TitleApi.sendTitle(currentPlayer, "§6§lSky Drops!", "§7§lAll skychests have been restocked!", 20, 80, 20);
+            } else if (tier == 2) {
+                TitleApi.sendTitle(currentPlayer, "§b§lSUPER Sky Drops!", "§7§lAll skychests have been restocked §c§lwith extra loot§7§l!", 20, 80, 20);
+            } else {
+                TitleApi.sendTitle(currentPlayer, "§5§lIMMORTAL Sky Drops!", "§7§lAll skychests have been restocked §5§lwith special loot§7§l!", 20, 80, 20);
+            }
+        }
+
+        for (String path : Skydrop.instance.fileManager.locationCfg.getConfigurationSection("skychest.").getKeys(false)) {
+            if (LocationUtil.isLocationActive(LocationUtil.getLocationFromConfig(Integer.parseInt(path)))) {
+                Location location = LocationUtil.getLocationFromConfig(Integer.parseInt(path));
+                location.getWorld().strikeLightningEffect(location);
+                Chest chest = (Chest) LocationUtil.getLocationFromConfig(Integer.parseInt(path)).getBlock().getState();
+                chest.getInventory().clear();
+                FileConfiguration fileConfiguration;
+
+                if (tier == 1) {
+                    fileConfiguration = Skydrop.instance.fileManager.tierOneCfg;
+                } else if (tier == 2) {
+                    fileConfiguration = Skydrop.instance.fileManager.tierTwoCfg;
+                } else {
+                    fileConfiguration = Skydrop.instance.fileManager.tierThreeCfg;
+                }
+
+                for (String itemPath : fileConfiguration.getConfigurationSection("item.").getKeys(false)) {
+                    int randomNumber = ThreadLocalRandom.current().nextInt(1, 100 + 1);
+                    if (randomNumber <= fileConfiguration.getInt("item." + itemPath + ".dropchance")) {
+                        int randomSlot = ThreadLocalRandom.current().nextInt(0, 26 + 1);
+                        if (chest.getInventory().firstEmpty() == -1) {
+                            continue;
+                        }
+                        if (chest.getInventory().getItem(randomSlot) == null || chest.getInventory().getItem(randomSlot).getType() == Material.AIR) {
+                            chest.getInventory().setItem(randomSlot, getItemstackFromConfig(fileConfiguration, "item." + itemPath));
+                        } else {
+                            chest.getInventory().setItem(chest.getInventory().firstEmpty(), getItemstackFromConfig(fileConfiguration, "item." + itemPath));
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static ItemStack getItemstackFromConfig(FileConfiguration fileConfiguration, String itemPath) {
@@ -175,4 +259,37 @@ public class LootchestUtil {
         return itemStack;
     }
 
+    public static void sendParticle(Player player) {
+        new BukkitRunnable() {
+            Location location = player.getLocation();
+            double t = 0;
+            double r = 1;
+            double up = 0.2;
+
+            @Override
+            public void run() {
+                t = t + Math.PI / 8;
+                double x = r * Math.cos(t);
+                double y = up * t;
+                double z = r * Math.sin(t);
+                location.add(x, y, z);
+                location.getWorld().playEffect(location, Effect.HAPPY_VILLAGER, 1);
+                location.subtract(x, y, z);
+                if (t > Math.PI * 4) {
+                    this.cancel();
+                }
+            }
+
+        }.runTaskTimer(Skydrop.instance, 0, 1);
+    }
+
+    public static void consumeItemstack(ItemStack itemStack, Player player) {
+        if (itemStack.getAmount() == 1) {
+            int activeSlot = player.getInventory().getHeldItemSlot();
+            player.getInventory().setItem(activeSlot, new ItemBuilder(Material.AIR).build());
+            return;
+        }
+        itemStack.setAmount(itemStack.getAmount() - 1);
+    }
 }
+
