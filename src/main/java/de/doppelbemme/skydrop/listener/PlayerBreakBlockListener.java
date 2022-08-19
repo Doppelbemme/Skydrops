@@ -16,7 +16,7 @@ public class PlayerBreakBlockListener implements Listener {
         Player player = event.getPlayer();
         if (ValidatorUtil.isSetupItem(player.getInventory().getItemInHand())) {
             if (!player.hasPermission("skydrop.action.setup")) {
-                MessageUtil.sendNegativeFeedback(player, "§cYou don´t have permission to use this tool.");
+                MessageUtil.sendNegativeFeedback(player, MessageUtil.getNoPermission());
                 return;
             }
             if (event.getBlock().getType() != Material.CHEST) {
@@ -29,14 +29,14 @@ public class PlayerBreakBlockListener implements Listener {
                     LocationUtil.toggleLocationActiveStatus(event.getBlock().getLocation());
                 }
             }
-            MessageUtil.sendPositiveFeedback(player, "§aChest has been successfully saved.");
+            MessageUtil.sendPositiveFeedback(player, MessageUtil.getChestSaved());
             event.setCancelled(true);
             return;
         }
 
         if (player.isSneaking()) {
             if (!player.hasPermission("skydrop.action.setup")) {
-                MessageUtil.sendNegativeFeedback(player, "§cYou don´t have permission to break this skychest.");
+                MessageUtil.sendNegativeFeedback(player, MessageUtil.getNoPermission());
                 return;
             }
             if (event.getBlock().getType() != Material.CHEST) {
@@ -49,13 +49,13 @@ public class PlayerBreakBlockListener implements Listener {
                 return;
             }
             LocationUtil.toggleLocationActiveStatus(event.getBlock().getLocation());
-            MessageUtil.sendPositiveFeedback(player, "§aChest has been successfully removed.");
+            MessageUtil.sendPositiveFeedback(player, MessageUtil.getChestRemoved());
             return;
         }
 
         if (event.getBlock().getType() == Material.CHEST && LocationUtil.isLocationInConfig(event.getBlock().getLocation())) {
             if (LocationUtil.isLocationActive(event.getBlock().getLocation())) {
-                MessageUtil.sendNegativeFeedback(player, "§cIn order to break a skychest you have to be sneaking.");
+                MessageUtil.sendNegativeFeedback(player, MessageUtil.getChestSneak());
                 event.setCancelled(true);
             }
         }

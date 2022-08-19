@@ -34,6 +34,8 @@ public final class Skydrop extends JavaPlugin {
         fileManager.setupTierTwoFile();
         fileManager.saveTierThreeFile();
         fileManager.setupTierThreeFile();
+        fileManager.saveMessageFile();
+        fileManager.setupMessageFile();
         registerCommands();
         registerListener();
         startSkydropTask();
@@ -73,7 +75,9 @@ public final class Skydrop extends JavaPlugin {
                 } else {
                     tier = 3;
                 }
-                LootchestUtil.summonSkydrop(tier);
+                if (enabled) {
+                    LootchestUtil.summonSkydrop(tier);
+                }
             }
         }, 20 * TimeUnit.MINUTES.toSeconds(30), 20 * TimeUnit.HOURS.toSeconds(1));
     }

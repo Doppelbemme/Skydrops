@@ -11,11 +11,11 @@ public class SetupItemCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("§cThis command may only be used by a player.");
+            sender.sendMessage(MessageUtil.getConsoleError());
         }
         Player player = (Player) sender;
         if (!player.hasPermission("skydrop.command.setupitem")) {
-            MessageUtil.sendNegativeFeedback(player, "§cYou don´t have permission to use this command.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getNoPermission());
             return false;
         }
         if (args.length != 0) {
@@ -24,11 +24,11 @@ public class SetupItemCommand implements CommandExecutor {
         }
 
         if (player.getInventory().firstEmpty() == -1) {
-            MessageUtil.sendNegativeFeedback(player, "§cYou don´t have free inventory space.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getInventorySpace());
             return false;
         }
 
-        MessageUtil.sendPositiveFeedback(player, "§aYou have received the setup tool.");
+        MessageUtil.sendPositiveFeedback(player, MessageUtil.getSetupTool());
         player.getInventory().addItem(ItemUtil.getSetupItem());
         return false;
     }

@@ -13,11 +13,11 @@ public class GiveGeneratorCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("§cThis command may only be used by a player.");
+            sender.sendMessage(MessageUtil.getConsoleError());
         }
         Player player = (Player) sender;
         if (!player.hasPermission("skydrop.command.givegen")) {
-            MessageUtil.sendNegativeFeedback(player, "§cYou don´t have permission to use this command.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getNoPermission());
             return false;
         }
         if (args.length != 2) {
@@ -26,7 +26,7 @@ public class GiveGeneratorCommand implements CommandExecutor {
         }
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
-            MessageUtil.sendNegativeFeedback(player, "§cThis player is not online.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getOffline());
             return false;
         }
 
@@ -34,17 +34,17 @@ public class GiveGeneratorCommand implements CommandExecutor {
         try {
             tier = Integer.parseInt(args[1]);
         } catch (Exception exception) {
-            MessageUtil.sendNegativeFeedback(player, "§cPlease enter a valid tier.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getTierError());
             return false;
         }
 
         if (tier < 1 || tier > 3) {
-            MessageUtil.sendNegativeFeedback(player, "§cPlease enter a valid tier.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getTierError());
             return false;
         }
 
         if (target.getInventory().firstEmpty() == -1) {
-            MessageUtil.sendNegativeFeedback(player, "§cThis player doesn´t has free inventory space.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getInventorySpace());
             return false;
         }
 
@@ -52,7 +52,7 @@ public class GiveGeneratorCommand implements CommandExecutor {
         if (player != target) {
             MessageUtil.sendPositiveFeedback(player, "§aA stormgenerator §etier " + tier + " §ahas been given to §e" + target.getName() + "§a.");
         }
-        MessageUtil.sendPositiveFeedback(target, "§aA storgenerator §etier " + tier + " §ahas been added to your inventory.");
+        MessageUtil.sendPositiveFeedback(target, MessageUtil.getGeneratorRecived());
         return false;
     }
 }

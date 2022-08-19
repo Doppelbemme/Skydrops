@@ -2,7 +2,6 @@ package de.doppelbemme.skydrop.util;
 
 import org.bukkit.inventory.ItemStack;
 
-import javax.swing.text.html.parser.Entity;
 
 public class ValidatorUtil {
 

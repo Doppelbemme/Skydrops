@@ -122,7 +122,7 @@ public class LootchestUtil {
             @Override
             public void run() {
                 if (i > 0) {
-                    MessageUtil.sendPositiveFeedback(player, "§ePersonal Item Lottery In: §f" + i + "s");
+                    MessageUtil.sendPositiveFeedback(player, MessageUtil.getLotteryIn() + i + "s");
                     i = i - 1;
                     return;
                 } else {
@@ -177,11 +177,11 @@ public class LootchestUtil {
         for (Player currentPlayer : Bukkit.getOnlinePlayers()) {
             currentPlayer.playSound(currentPlayer.getLocation(), Sound.AMBIENCE_THUNDER, 5, 1);
             if (tier == 1) {
-                TitleApi.sendTitle(currentPlayer, "§6§lSky Drops!", "§7§lAll skychests have been restocked!", 20, 80, 20);
+                TitleApi.sendTitle(currentPlayer, "§6§lSky Drops!", "§7§lRestocked all skychests!", 20, 80, 20);
             } else if (tier == 2) {
-                TitleApi.sendTitle(currentPlayer, "§b§lSUPER Sky Drops!", "§7§lAll skychests have been restocked §c§lwith extra loot§7§l!", 20, 80, 20);
+                TitleApi.sendTitle(currentPlayer, "§b§lSUPER Sky Drops!", "§7§lRestocked all skychests §c§lwith extra loot§7§l!", 20, 80, 20);
             } else {
-                TitleApi.sendTitle(currentPlayer, "§5§lIMMORTAL Sky Drops!", "§7§lAll skychests have been restocked §5§lwith special loot§7§l!", 20, 80, 20);
+                TitleApi.sendTitle(currentPlayer, "§5§lIMMORTAL Sky Drops!", "§7§lRestocked all skychests §5§lwith special loot§7§l!", 20, 80, 20);
             }
         }
 

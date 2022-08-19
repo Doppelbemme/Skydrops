@@ -94,7 +94,7 @@ public class InventoryInteractListener implements Listener {
                             }
                             SkydropBonusInventory.lotteryLoot.remove(player);
                             player.closeInventory();
-                            MessageUtil.sendPositiveFeedback(player, "§aYour rewards have been added to your inventory.");
+                            MessageUtil.sendPositiveFeedback(player, MessageUtil.getLotteryRewards());
                             this.cancel();
                         }
 
@@ -114,7 +114,7 @@ public class InventoryInteractListener implements Listener {
             if (itemMeta.getDisplayName().equalsIgnoreCase("§b§lSkyDrop Tier 1")) {
                 if (event.getClick() == ClickType.LEFT) {
                     player.getInventory().addItem(GeneratorUtil.getGenerator(1));
-                    MessageUtil.sendPositiveFeedback(player, "§aItem has been added to your inventory.");
+                    MessageUtil.sendPositiveFeedback(player, MessageUtil.getItemRecived());
                 } else if (event.getClick() == ClickType.RIGHT) {
                     LootchestUtil.summonSkydrop(1);
                 } else {
@@ -128,7 +128,7 @@ public class InventoryInteractListener implements Listener {
             if (itemMeta.getDisplayName().equalsIgnoreCase("§b§lSkyDrop Tier 2")) {
                 if (event.getClick() == ClickType.LEFT) {
                     player.getInventory().addItem(GeneratorUtil.getGenerator(2));
-                    MessageUtil.sendPositiveFeedback(player, "§aItem has been added to your inventory.");
+                    MessageUtil.sendPositiveFeedback(player, MessageUtil.getItemRecived());
                 } else if (event.getClick() == ClickType.RIGHT) {
                     LootchestUtil.summonSkydrop(2);
                 } else {
@@ -142,7 +142,7 @@ public class InventoryInteractListener implements Listener {
             if (itemMeta.getDisplayName().equalsIgnoreCase("§b§lSkyDrop Tier 3")) {
                 if (event.getClick() == ClickType.LEFT) {
                     player.getInventory().addItem(GeneratorUtil.getGenerator(3));
-                    MessageUtil.sendPositiveFeedback(player, "§aItem has been added to your inventory.");
+                    MessageUtil.sendPositiveFeedback(player, MessageUtil.getItemRecived());
                 } else if (event.getClick() == ClickType.RIGHT) {
                     LootchestUtil.summonSkydrop(3);
                 } else {
@@ -155,7 +155,7 @@ public class InventoryInteractListener implements Listener {
 
             if (itemMeta.getDisplayName().equalsIgnoreCase("§a§lSkyDrop Aktiviert")) {
                 Skydrop.enabled = false;
-                MessageUtil.sendPositiveFeedback(player, "§aSkyDrops have been disabled sucessfully.");
+                MessageUtil.sendPositiveFeedback(player, MessageUtil.getDeactivated());
                 player.closeInventory();
                 event.setCancelled(true);
                 return;
@@ -163,7 +163,7 @@ public class InventoryInteractListener implements Listener {
 
             if (itemMeta.getDisplayName().equalsIgnoreCase("§c§lSkyDrop Deaktiviert")) {
                 Skydrop.enabled = true;
-                MessageUtil.sendPositiveFeedback(player, "§aSkyDrops have been enabled sucessfully.");
+                MessageUtil.sendPositiveFeedback(player, MessageUtil.getActivated());
                 player.closeInventory();
                 event.setCancelled(true);
             }

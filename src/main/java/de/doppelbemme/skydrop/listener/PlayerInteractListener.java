@@ -1,5 +1,6 @@
 package de.doppelbemme.skydrop.listener;
 
+import de.doppelbemme.skydrop.Skydrop;
 import de.doppelbemme.skydrop.inventorys.SkydropBonusInventory;
 import de.doppelbemme.skydrop.util.GeneratorUtil;
 import de.doppelbemme.skydrop.util.LocationUtil;
@@ -42,7 +43,7 @@ public class PlayerInteractListener implements Listener {
                     break;
                 }
                 if (isChestEmpty) {
-                    TitleApi.sendTitle(event.getPlayer(), "§c§lAlready looted!", "", 10, 20, 10);
+                    TitleApi.sendTitle(event.getPlayer(), MessageUtil.getChestLooted(), "", 10, 20, 10);
                     event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.NOTE_BASS, 5, 1);
                     event.setCancelled(true);
                 }
@@ -54,9 +55,14 @@ public class PlayerInteractListener implements Listener {
                     || event.getPlayer().getInventory().getItemInHand().isSimilar(GeneratorUtil.getGenerator(2))
                     || event.getPlayer().getInventory().getItemInHand().isSimilar(GeneratorUtil.getGenerator(3))) {
 
+                if (!Skydrop.enabled) {
+                    MessageUtil.sendNegativeFeedback(event.getPlayer(), MessageUtil.getSkydropDisabled());
+                    return;
+                }
+
                 if (SkydropBonusInventory.cooldown.containsKey(event.getPlayer())) {
                     if (SkydropBonusInventory.cooldown.get(event.getPlayer()) > System.currentTimeMillis()) {
-                        MessageUtil.sendNegativeFeedback(event.getPlayer(), "§cYou recently summoned a skydrop. Please wait a moment.");
+                        MessageUtil.sendNegativeFeedback(event.getPlayer(), MessageUtil.getSkydropCooldown());
                         return;
                     }
                 }
