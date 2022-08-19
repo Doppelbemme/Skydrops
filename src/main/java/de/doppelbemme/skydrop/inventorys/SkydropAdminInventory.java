@@ -13,6 +13,10 @@ public class SkydropAdminInventory {
     public static Inventory getInventory() {
         Inventory inventory = Bukkit.createInventory(null, 5 * 9, "§e§lSkyDrop Admin");
 
+        for (int i = 0; i < 5 * 9; i++) {
+            inventory.setItem(i, new ItemBuilder(Material.STAINED_GLASS_PANE, 1, (byte) 15).build());
+        }
+
         inventory.setItem(13, new ItemBuilder(Material.NETHER_STAR).
                 setDisplayName("§e§lSkydrop Administration").
                 build());

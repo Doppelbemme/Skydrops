@@ -104,7 +104,7 @@ public class InventoryInteractListener implements Listener {
             event.setCancelled(true);
         }
         if (event.getInventory().getName().equalsIgnoreCase("§e§lSkyDrop Admin")) {
-            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
+            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR || event.getCurrentItem().getType() == Material.STAINED_GLASS_PANE) {
                 event.setCancelled(true);
                 return;
             }
