@@ -11,11 +11,11 @@ public class SummonSkydrop implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("§cThis command may only be used by a player.");
+            sender.sendMessage(MessageUtil.getConsoleError());
         }
         Player player = (Player) sender;
         if (!player.hasPermission("skydrop.command.summonskydrop")) {
-            MessageUtil.sendNegativeFeedback(player, "§cYou don´t have permission to use this command.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getNoPermission());
             return false;
         }
         if (args.length != 1) {
@@ -27,16 +27,16 @@ public class SummonSkydrop implements CommandExecutor {
         try {
             tier = Integer.parseInt(args[0]);
         } catch (Exception exception) {
-            MessageUtil.sendNegativeFeedback(player, "§cPlease enter a valid tier.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getTierError());
             return false;
         }
 
         if (tier < 1 || tier > 3) {
-            MessageUtil.sendNegativeFeedback(player, "§cPlease enter a valid tier.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getTierError());
             return false;
         }
 
-        MessageUtil.sendPositiveFeedback(player, "§aYou have successfully triggered a Skydrop.");
+        MessageUtil.sendPositiveFeedback(player, MessageUtil.getStormSummoned());
         LootchestUtil.summonSkydrop(player, tier);
         return true;
     }

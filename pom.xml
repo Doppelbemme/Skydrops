@@ -6,7 +6,7 @@
 
     <groupId>de.doppelbemme</groupId>
     <artifactId>skydrop</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.3.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Skydrop</name>
@@ -76,6 +76,11 @@
             <groupId>xyz.tozymc.spigot</groupId>
             <artifactId>title-api</artifactId>
             <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>xyz.xenondevs</groupId>
+            <artifactId>particle</artifactId>
+            <version>1.8.1</version>
         </dependency>
     </dependencies>
 </project>

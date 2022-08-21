@@ -16,11 +16,11 @@ public class AddItemCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("§cThis command may only be used by a player.");
+            sender.sendMessage(MessageUtil.getConsoleError());
         }
         Player player = (Player) sender;
         if (!player.hasPermission("skydrop.command.additem")) {
-            MessageUtil.sendNegativeFeedback(player, "§cYou don´t have permission to use this command.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getNoPermission());
             return false;
         }
         if (args.length != 3) {
@@ -32,12 +32,12 @@ public class AddItemCommand implements CommandExecutor {
         try {
             tier = Integer.parseInt(args[0]);
         } catch (Exception exception) {
-            MessageUtil.sendNegativeFeedback(player, "§cPlease enter a valid tier.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getTierError());
             return false;
         }
 
         if (tier < 1 || tier > 3) {
-            MessageUtil.sendNegativeFeedback(player, "§cPlease enter a valid tier.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getTierError());
             return false;
         }
 
@@ -45,29 +45,29 @@ public class AddItemCommand implements CommandExecutor {
         try {
             chance = Integer.parseInt(args[1]);
         } catch (Exception exception) {
-            MessageUtil.sendNegativeFeedback(player, "§cPlease enter a valid dropchance.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getDropchanceError());
             return false;
         }
 
         String name = args[2].toLowerCase(Locale.ROOT);
 
         if (chance < 0 || chance > 100) {
-            MessageUtil.sendNegativeFeedback(player, "§cPlease enter a valid dropchance.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getDropchanceError());
             return false;
         }
 
         if (player.getInventory().getItemInHand() == null || player.getInventory().getItemInHand().getType() == Material.AIR) {
-            MessageUtil.sendNegativeFeedback(player, "§cYou need to hold a item to use this command.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getHoldItemError());
             return false;
         }
 
         if (!player.getInventory().getItemInHand().hasItemMeta()) {
-            MessageUtil.sendNegativeFeedback(player, "§cCould not find any metadata for this item.");
+            MessageUtil.sendNegativeFeedback(player, MessageUtil.getHoldItemError());
             return false;
         }
 
         LootchestUtil.saveItemstackToConfig(player, player.getInventory().getItemInHand(), tier, name, chance);
-        MessageUtil.sendPositiveFeedback(player, "§aItem has been successfully saved.");
+        MessageUtil.sendPositiveFeedback(player, MessageUtil.getItemSaved());
         return true;
     }
 }
